@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}{{ movie.title }} - FujiMovie{% endblock %}
+
+{% block content %}
+<a href="/movies" class="btn btn-secondary mb-4">
+    <i class="fas fa-arrow-left"></i> Volver
+</a>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <img src="{{ movie.imageUrl }}" alt="{{ movie.title }}" class="img-fluid rounded" style="border: 2px solid #6366f1;">
+    </div>
+    <div class="col-md-8">
+        <h1 class="page-title">{{ movie.title }}</h1>
+        
+        <div class="bg-dark p-3 rounded mb-4">
+            <div class="row">
+                <div class="col-md-6 mb-2">
+                    <strong><i class="fas fa-tag"></i> Género:</strong> {{ movie.genre }}
+                </div>
+                <div class="col-md-6 mb-2">
+                    <strong><i class="fas fa-calendar"></i> Año:</strong> {{ movie.year }}
+                </div>
+                <div class="col-md-6">
+                    <strong><i class="fas fa-star" style="color: #fbbf24;"></i> Calificación:</strong> {{ movie.stars }} / 5.0
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-dark p-3 rounded">
+            <h3><i class="fas fa-book"></i> Sinopsis</h3>
+            <p>{{ movie.description }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

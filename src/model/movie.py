@@ -2,10 +2,10 @@ from dataclasses import dataclass
 
 @dataclass
 class Movie:
+    id: int
     title: str
-    year: str
+    description: str
+    year: int
+    imageUrl: str
     genre: str
-    director: str
-    runtime: str
-    plot: str
-    poster: str
+    stars: float

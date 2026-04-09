@@ -72,6 +72,146 @@
         .btn-primary:hover {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
         }
+        
+        /* Estilos para valoración */
+        .rating-section {
+            background: rgba(99, 102, 241, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .star-rating-fancy {
+            display: flex;
+            gap: 15px;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+        }
+        
+        .star-rating-fancy input {
+            display: none;
+        }
+        
+        .star-label {
+            font-size: 3rem;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s;
+            filter: drop-shadow(0 0 0px rgba(236, 72, 153, 0));
+        }
+        
+        .star-label:hover,
+        .star-label:hover ~ .star-label {
+            color: #f59e0b;
+            filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.6));
+            transform: scale(1.2);
+        }
+        
+        .star-rating-fancy input:checked ~ .star-label {
+            color: #f59e0b;
+            filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.9));
+            animation: starPulse 0.3s ease-out;
+        }
+        
+        @keyframes starPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.4); }
+            100% { transform: scale(1.3); }
+        }
+        
+        .ratings-list {
+            background: rgba(99, 102, 241, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+        }
+        
+        .rating-item {
+            background: #1e293b;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 3px solid #f59e0b;
+            transition: all 0.3s ease;
+            animation: slideInRating 0.4s ease-out;
+        }
+        
+        .rating-item:hover {
+            transform: translateX(5px);
+            background: #293548;
+        }
+        
+        @keyframes slideInRating {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        /* Explosión */
+        .explosion-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 2000;
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            display: inline-block;
+            animation: confetti-fall 3s ease-out forwards;
+        }
+        
+        @keyframes confetti-fall {
+            to {
+                transform: translate(var(--tx), var(--ty)) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        .firework {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: firework-burst 0.8s ease-out forwards;
+        }
+        
+        @keyframes firework-burst {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(0);
+            }
+        }
+        
+        .pulse-ring {
+            position: fixed;
+            pointer-events: none;
+            animation: pulse-ring-animation 0.6s ease-out forwards;
+        }
+        
+        @keyframes pulse-ring-animation {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
     </style>
     {% block extra_css %}{% endblock %}
 </head>

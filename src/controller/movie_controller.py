@@ -109,3 +109,32 @@ def remove_from_library(movie_id):
         return jsonify({'message': 'Movie removed from library'}), 200
     else:
         return jsonify({'error': 'Movie not in library'}), 404
+
+@movie_bp.route('/<int:movie_id>/rate', methods=['POST'])
+def rate_movie(movie_id):
+    """Añade una valoración a una película"""
+    data = request.get_json()
+    
+    if not data or 'user' not in data or 'score' not in data:
+        return jsonify({'error': 'Missing user or score'}), 400
+    
+    user = data.get('user', '').strip()
+    try:
+        score = float(data.get('score'))
+    except (ValueError, TypeError):
+        return jsonify({'error': 'Score must be a number between 1 and 5'}), 400
+    
+    if not user:
+        return jsonify({'error': 'User name cannot be empty'}), 400
+    
+    if not movie_service.add_rating(movie_id, user, score):
+        return jsonify({'error': 'Score must be between 1 and 5'}), 400
+    
+    ratings = movie_service.get_ratings(movie_id)
+    return jsonify({'message': 'Rating added', 'ratings': ratings}), 201
+
+@movie_bp.route('/<int:movie_id>/ratings', methods=['GET'])
+def get_movie_ratings(movie_id):
+    """Obtiene las valoraciones de una película"""
+    ratings = movie_service.get_ratings(movie_id)
+    return jsonify(ratings)

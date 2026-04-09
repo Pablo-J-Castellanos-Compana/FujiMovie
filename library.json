@@ -8,5 +8,15 @@
     "image_url": "https://devsapihub.com/img-movies/1.jpg",
     "genre": "Drama",
     "stars": 5
+  },
+  {
+    "movie_id": 2,
+    "status": "visto",
+    "title": "Jumanji",
+    "description": "In Jumanji: The Next Level, the gang is back but the game has changed.",
+    "year": 2019,
+    "image_url": "https://devsapihub.com/img-movies/2.jpg",
+    "genre": "Adventure",
+    "stars": 3.4
   }
 ]

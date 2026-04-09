@@ -14,6 +14,7 @@ class MovieService:
         self.api_url = 'https://devsapihub.com/api-movies'
         self.timeout = 10
         self.library_file = os.path.join(os.path.dirname(__file__), '..', '..', 'library.json')
+        self.ratings_db = {}  # {movie_id: [{"user": "name", "score": 5}, ...]}
         self._ensure_library_file()
 
     def get_all_movies(self) -> List[Movie]:
@@ -141,3 +142,35 @@ class MovieService:
             self._save_library(new_library)
             return True
         return False
+
+    def add_rating(self, movie_id: int, user: str, score: float) -> bool:
+        """Añade una valoración a una película"""
+        if not (1 <= score <= 5):
+            return False
+        
+        if movie_id not in self.ratings_db:
+            self.ratings_db[movie_id] = []
+        
+        # Buscar si el usuario ya ha valorado
+        for rating in self.ratings_db[movie_id]:
+            if rating['user'].lower() == user.lower():
+                rating['score'] = score  # Actualizar valoración existente
+                return True
+        
+        # Añadir nueva valoración
+        self.ratings_db[movie_id].append({'user': user, 'score': score})
+        return True
+
+    def get_ratings(self, movie_id: int) -> dict:
+        """Obtiene las valoraciones de una película"""
+        ratings = self.ratings_db.get(movie_id, [])
+        if not ratings:
+            return {'average': 0, 'count': 0, 'ratings': []}
+        
+        average = sum(r['score'] for r in ratings) / len(ratings)
+        return {
+            'average': round(average, 2),
+            'count': len(ratings),
+            'ratings': ratings
+        }
+

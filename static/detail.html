@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de Película - FujiMovie</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/detail.css">
+</head>
+<body>
+    <div class="stars-bg"></div>
+    
+    <header class="header-detail">
+        <a href="/" class="back-btn">← Volver al catálogo</a>
+        <h1>🎬 FujiMovie</h1>
+    </header>
+
+    <div class="detail-container">
+        <button class="loading-btn" id="loadingBtn">Cargando película...</button>
+        
+        <div id="movieDetail" class="movie-detail hidden">
+            <div class="detail-header">
+                <div class="poster-section">
+                    <div class="movie-poster-large">🎬</div>
+                </div>
+                <div class="info-section">
+                    <h1 id="detailTitle" class="detail-title"></h1>
+                    <div class="detail-meta">
+                        <span id="detailYear" class="meta-item"></span>
+                        <span id="detailGenre" class="meta-genre"></span>
+                    </div>
+                    <p id="detailDescription" class="detail-description"></p>
+                    
+                    <div class="stats-section">
+                        <div class="stat-box">
+                            <span class="stat-label">Calificación Promedio</span>
+                            <span id="avgRating" class="stat-value">0.0 ⭐</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-label">Total Valoraciones</span>
+                            <span id="totalRatings" class="stat-value">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección de Valoración -->
+            <div class="rating-section-detail">
+                <h2>Valorar esta película</h2>
+                
+                <div class="rating-form">
+                    <input 
+                        type="text" 
+                        id="detailUserName" 
+                        class="detail-input" 
+                        placeholder="Tu nombre"
+                    >
+                    
+                    <div class="stars-selector">
+                        <div class="star-rating-large">
+                            <input type="radio" id="dstar5" name="detailRating" value="5">
+                            <label for="dstar5" class="star-lg">★</label>
+                            <input type="radio" id="dstar4" name="detailRating" value="4">
+                            <label for="dstar4" class="star-lg">★</label>
+                            <input type="radio" id="dstar3" name="detailRating" value="3">
+                            <label for="dstar3" class="star-lg">★</label>
+                            <input type="radio" id="dstar2" name="detailRating" value="2">
+                            <label for="dstar2" class="star-lg">★</label>
+                            <input type="radio" id="dstar1" name="detailRating" value="1">
+                            <label for="dstar1" class="star-lg">★</label>
+                        </div>
+                    </div>
+                    
+                    <button class="submit-btn-detail" onclick="submitDetailRating()">
+                        💫 Enviar Valoración
+                    </button>
+                </div>
+
+                <!-- Lista de Valoraciones -->
+                <div class="ratings-list">
+                    <h3>Valoraciones de usuarios</h3>
+                    <div id="ratingsList" class="ratings-items">
+                        <p class="empty-ratings">Sin valoraciones aún</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Efecto de explosión -->
+    <div id="explosionContainer" class="explosion-container"></div>
+
+    <script src="/static/detail.js"></script>
+</body>
+</html>

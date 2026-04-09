@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FujiMovie - Catálogo de Películas</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="stars-bg"></div>
+    
+    <header class="header">
+        <h1 class="title">🎬 FujiMovie</h1>
+        <p class="subtitle">Catálogo de películas con valoraciones</p>
+    </header>
+
+    <div class="container">
+        <!-- Panel de búsqueda -->
+        <div class="search-panel">
+            <input 
+                type="text" 
+                id="searchInput" 
+                class="search-input" 
+                placeholder="Buscar película..."
+            >
+            <select id="genreFilter" class="filter-select">
+                <option value="">Todos los géneros</option>
+                <option value="Action">Acción</option>
+                <option value="Drama">Drama</option>
+                <option value="Comedy">Comedia</option>
+                <option value="Horror">Terror</option>
+                <option value="Romance">Romance</option>
+            </select>
+        </div>
+
+        <!-- Lista de películas -->
+        <div id="moviesContainer" class="movies-grid">
+            <div class="loading">Cargando películas...</div>
+        </div>
+    </div>
+
+    <!-- Modal de valoración -->
+    <div id="ratingModal" class="modal hidden">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeRatingModal()">&times;</button>
+            <h2 id="movieTitle"></h2>
+            <div class="star-rating">
+                <input type="radio" id="star5" name="rating" value="5">
+                <label for="star5" class="star">★</label>
+                <input type="radio" id="star4" name="rating" value="4">
+                <label for="star4" class="star">★</label>
+                <input type="radio" id="star3" name="rating" value="3">
+                <label for="star3" class="star">★</label>
+                <input type="radio" id="star2" name="rating" value="2">
+                <label for="star2" class="star">★</label>
+                <input type="radio" id="star1" name="rating" value="1">
+                <label for="star1" class="star">★</label>
+            </div>
+            <input 
+                type="text" 
+                id="userName" 
+                class="user-input" 
+                placeholder="Tu nombre"
+            >
+            <button class="submit-btn" onclick="submitRating()">Valorar Película</button>
+        </div>
+    </div>
+
+    <!-- Efecto de explosión -->
+    <div id="explosionContainer" class="explosion-container"></div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>

@@ -32,6 +32,22 @@
             <h3><i class="fas fa-book"></i> Sinopsis</h3>
             <p>{{ movie.description }}</p>
         </div>
+
+        <div class="mt-4">
+            <h3><i class="fas fa-plus"></i> Añadir a Mi Biblioteca</h3>
+            <form method="post" action="/add_to_library/{{ movie.id }}">
+                <div class="mb-3">
+                    <label for="status" class="form-label">Estado inicial:</label>
+                    <select name="status" id="status" class="form-select">
+                        <option value="por ver">Por ver</option>
+                        <option value="visto">Visto</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-bookmark"></i> Añadir a Biblioteca
+                </button>
+            </form>
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -64,6 +64,31 @@ def movie_details(movie_id):
         return redirect(url_for('list_movies'))
     return render_template('movies/details.html', movie=movie)
 
+@app.route('/library')
+def library():
+    user_movies = movie_service.get_library()
+    return render_template('library.html', user_movies=user_movies)
+
+@app.route('/add_to_library/<int:movie_id>', methods=['POST'])
+def add_to_library(movie_id):
+    status = request.form.get('status', 'por ver')
+    success = movie_service.add_to_library(movie_id, status)
+    if success:
+        return redirect(url_for('movie_details', movie_id=movie_id))
+    else:
+        return redirect(url_for('movie_details', movie_id=movie_id))
+
+@app.route('/update_status/<int:movie_id>', methods=['POST'])
+def update_status(movie_id):
+    status = request.form.get('status')
+    movie_service.update_movie_status(movie_id, status)
+    return redirect(url_for('library'))
+
+@app.route('/remove_from_library/<int:movie_id>', methods=['POST'])
+def remove_from_library(movie_id):
+    movie_service.remove_from_library(movie_id)
+    return redirect(url_for('library'))
+
 @app.errorhandler(404)
 def not_found(error):
     return render_template('error.html', error_code=404, message="Página no encontrada"), 404

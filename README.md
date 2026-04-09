@@ -1,2 +1,2 @@
 # FujiMovie
-For Fujitsu Talent Academy
+For Fujitsu Talent Academy.

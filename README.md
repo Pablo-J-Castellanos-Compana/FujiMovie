@@ -1,6 +1,6 @@
 # FujiMovie
 
-Aplicación Spring Boot para consultar información de películas desde la API de OMDB.
+Aplicación Flask para consultar información de películas desde la API de OMDB.
 
 ## Descripción
 
@@ -8,52 +8,46 @@ Esta aplicación permite buscar películas por título utilizando la API gratuit
 
 ## Requisitos Previos
 
-- **Java 17** o superior
-- **Maven 3.6+**
+- **Python 3.8+**
 - **Clave API de OMDB** (gratuita)
 
 ## Instalación
 
-### 1. Instalar Java 17
+### 1. Instalar Python
 
-Descarga e instala Java 17 desde [Adoptium](https://adoptium.net/):
+Asegúrate de tener Python 3.8 o superior instalado. Descárgalo desde [python.org](https://www.python.org/downloads/).
 
-1. Ve a https://adoptium.net/
-2. Descarga la versión 17 para Windows
-3. Instala y verifica con:
-   ```bash
-   java -version
-   ```
+Verifica la instalación:
+```bash
+python --version
+```
 
-### 2. Instalar Maven
+### 2. Instalar dependencias
 
-1. Descarga Maven desde [Apache Maven](https://maven.apache.org/download.cgi)
-2. Descomprime el archivo ZIP
-3. Agrega la carpeta `bin` al PATH del sistema
-4. Verifica con:
-   ```bash
-   mvn -version
-   ```
+```bash
+pip install -r requirements.txt
+```
 
 ### 3. Obtener Clave API de OMDB
 
 1. Ve a http://www.omdbapi.com/apikey.aspx
 2. Regístrate gratis
 3. Obtén tu clave API
-4. Edita el archivo `src/main/resources/application.properties`
+4. Edita el archivo `.env`
 5. Reemplaza `YOUR_API_KEY_HERE` con tu clave real:
    ```
-   omdb.api.key=tu_clave_aqui
+   OMDB_API_KEY=tu_clave_aqui
    ```
 
 ## Ejecución
 
-1. Abre una terminal en la raíz del proyecto
-2. Ejecuta:
-   ```bash
-   mvn spring-boot:run
-   ```
-3. El servidor se iniciará en http://localhost:8080
+Ejecuta la aplicación:
+
+```bash
+python app.py
+```
+
+El servidor se iniciará en http://localhost:8080
 
 ## Uso
 
@@ -91,26 +85,24 @@ http://localhost:8080/api/movies/search?title=Inception
 
 ## Tecnologías Utilizadas
 
-- **Spring Boot 3.2.4**
-- **Java 17**
-- **WebClient** para llamadas HTTP
+- **Flask 3.0.0**
+- **Python 3.8+**
+- **Requests** para llamadas HTTP
 - **OMDB API** para datos de películas
 
 ## Estructura del Proyecto
 
 ```
-src/
-├── main/
-│   ├── java/com/fujimovie/catalog/
-│   │   ├── FujiMovieApplication.java    # Clase principal
-│   │   ├── controller/
-│   │   │   └── MovieController.java     # Endpoints REST
-│   │   ├── model/
-│   │   │   └── Movie.java               # Modelo de datos
-│   │   └── service/
-│   │       └── MovieService.java        # Lógica de negocio
-│   └── resources/
-│       └── application.properties       # Configuración
+├── app.py                          # Aplicación principal Flask
+├── requirements.txt                # Dependencias Python
+├── .env                           # Variables de entorno
+└── src/
+    ├── controller/
+    │   └── movie_controller.py    # Endpoints REST
+    ├── model/
+    │   └── movie.py               # Modelo de datos
+    └── service/
+        └── movie_service.py        # Lógica de negocio
 ```
 
 ## Notas

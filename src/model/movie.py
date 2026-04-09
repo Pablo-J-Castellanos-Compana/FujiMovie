@@ -6,6 +6,6 @@ class Movie:
     title: str
     description: str
     year: int
-    imageUrl: str
+    image_url: str
     genre: str
     stars: float

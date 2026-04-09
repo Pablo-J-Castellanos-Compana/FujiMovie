@@ -1,12 +1,1 @@
-[
-  {
-    "movie_id": 1,
-    "status": "por ver",
-    "title": "The Shawshank Redemption",
-    "description": "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.",
-    "year": 1994,
-    "image_url": "https://devsapihub.com/img-movies/1.jpg",
-    "genre": "Drama",
-    "stars": 5
-  }
-]
+[]

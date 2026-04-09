@@ -33,7 +33,9 @@
     <div class="col-md-6 col-lg-4 mb-4">
         <div class="movie-card h-100">
             <div class="movie-image">
-                <img src="{{ movie.image_url }}" alt="{{ movie.title }}">
+                <a href="/movies/{{ movie.id }}">
+                    <img src="{{ movie.image_url }}" alt="{{ movie.title }}">
+                </a>
             </div>
             <div class="p-3">
                 <h5 class="card-title">{{ movie.title }}</h5>
@@ -45,6 +47,12 @@
                     {{ movie.description[:100] }}...
                 </p>
                 <div class="d-flex justify-content-between align-items-center">
+                    <form method="post" action="/add_to_library/{{ movie.id }}" class="d-inline">
+                        <input type="hidden" name="status" value="por ver">
+                        <button type="submit" class="btn btn-sm btn-success" title="Añadir a biblioteca">
+                            <i class="fas fa-plus"></i> Añadir
+                        </button>
+                    </form>
                     <span>
                         <i class="fas fa-star" style="color: #fbbf24;"></i> {{ movie.stars }}
                     </span>
@@ -59,3 +67,20 @@
 </div>
 {% endif %}
 {% endblock %}
+
+<style>
+.movie-image {
+    position: relative;
+}
+.movie-image a {
+    display: block;
+}
+.movie-image a img {
+    width: 100%;
+    height: auto;
+    transition: opacity 0.3s;
+}
+.movie-image a:hover img {
+    opacity: 0.8;
+}
+</style>

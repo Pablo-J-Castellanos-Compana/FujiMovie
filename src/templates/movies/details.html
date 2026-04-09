@@ -34,46 +34,53 @@
         </div>
 
         <div class="mt-4">
-            <h3><i class="fas fa-plus"></i> Añadir a Mi Biblioteca</h3>
-            <form method="post" action="/add_to_library/{{ movie.id }}">
-                <div class="mb-3">
-                    <label for="status" class="form-label">Estado inicial:</label>
-                    <select name="status" id="status" class="form-select">
-                        <option value="por ver">Por ver</option>
-                        <option value="visto">Visto</option>
-                    </select>
+            {% if session.get('user_id') %}
+                {% if is_in_library %}
+                <div class="alert alert-success mb-3">
+                    <i class="fas fa-check-circle"></i> Esta película está en tu biblioteca
                 </div>
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-bookmark"></i> Añadir a Biblioteca
-                </button>
-            </form>
+                <form method="post" action="/remove_from_library/{{ movie.id }}" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Eliminar de Biblioteca
+                    </button>
+                </form>
+                {% else %}
+                <form method="post" action="/add_to_library/{{ movie.id }}">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-bookmark"></i> Añadir a Mi Biblioteca
+                    </button>
+                </form>
+                {% endif %}
+            {% else %}
+            <div class="alert alert-info mb-3">
+                <i class="fas fa-info-circle"></i> 
+                <a href="{{ url_for('login') }}" style="color: #6366f1; font-weight: bold;">Inicia sesión</a> 
+                para agregar películas a tu biblioteca
+            </div>
+            {% endif %}
         </div>
 
         <!-- Sección de Valoración -->
+        {% if session.get('user_id') %}
         <div class="mt-5 rating-section">
             <h3><i class="fas fa-star"></i> Valorar esta película</h3>
-            <form id="ratingForm" class="mt-3">
+            <form method="POST" action="/rate_movie/{{ movie.id }}" class="mt-3">
                 <div class="mb-3">
-                    <label for="userName" class="form-label">Tu nombre:</label>
-                    <input type="text" class="form-control" id="userName" name="userName" required>
-                </div>
-                
-                <div class="mb-3">
-                    <label class="form-label">Calificación:</label>
+                    <label class="form-label">Tu calificación:</label>
                     <div class="star-rating-fancy">
-                        <input type="radio" id="star5" name="score" value="5" required>
+                        <input type="radio" id="star5" name="rating" value="5" required>
                         <label for="star5" class="star-label">★</label>
                         
-                        <input type="radio" id="star4" name="score" value="4">
+                        <input type="radio" id="star4" name="rating" value="4">
                         <label for="star4" class="star-label">★</label>
                         
-                        <input type="radio" id="star3" name="score" value="3">
+                        <input type="radio" id="star3" name="rating" value="3">
                         <label for="star3" class="star-label">★</label>
                         
-                        <input type="radio" id="star2" name="score" value="2">
+                        <input type="radio" id="star2" name="rating" value="2">
                         <label for="star2" class="star-label">★</label>
                         
-                        <input type="radio" id="star1" name="score" value="1">
+                        <input type="radio" id="star1" name="rating" value="1">
                         <label for="star1" class="star-label">★</label>
                     </div>
                 </div>
@@ -83,80 +90,170 @@
                 </button>
             </form>
         </div>
-
-        <!-- Lista de Valoraciones -->
-        <div class="mt-5 ratings-list">
-            <h3><i class="fas fa-comments"></i> Valoraciones de usuarios</h3>
-            <div id="ratingsList" class="mt-3">
-                <p class="text-muted">Cargando valoraciones...</p>
-            </div>
+        {% else %}
+        <div class="mt-5 alert alert-warning">
+            <i class="fas fa-lock"></i> 
+            <a href="{{ url_for('login') }}" style="color: #6366f1; font-weight: bold;">Inicia sesión</a> 
+            para valorar películas
         </div>
+        {% endif %}
     </div>
 </div>
 
 <!-- Contenedor para efectos de explosión -->
 <div id="explosionContainer" class="explosion-container"></div>
 
+<style>
+    .explosion-container {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        z-index: 2000;
+    }
+    
+    .confetti {
+        position: fixed;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        animation: confettiFall 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+    
+    @keyframes confettiFall {
+        from {
+            opacity: 1;
+            transform: translate(0, 0) rotate(0deg);
+        }
+        to {
+            opacity: 0;
+            transform: translate(var(--tx), var(--ty)) rotate(720deg);
+        }
+    }
+    
+    .firework {
+        position: fixed;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        box-shadow: 0 0 10px currentColor;
+        animation: fireworkBurst 0.8s ease-out forwards;
+    }
+    
+    @keyframes fireworkBurst {
+        from {
+            opacity: 1;
+            transform: translate(0, 0) scale(1);
+        }
+        to {
+            opacity: 0;
+            transform: translate(var(--tx), var(--ty)) scale(0.5);
+        }
+    }
+    
+    .pulse-ring {
+        position: fixed;
+        width: 100px;
+        height: 100px;
+        border: 3px solid #6366f1;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        animation: pulseExpand 0.6s ease-out forwards;
+        pointer-events: none;
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.6);
+    }
+    
+    @keyframes pulseExpand {
+        from {
+            width: 100px;
+            height: 100px;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        to {
+            width: 300px;
+            height: 300px;
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(3);
+        }
+    }
+    
+    @keyframes slideInRight {
+        from {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    @keyframes slideOutRight {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+    }
+</style>
+
 <script>
     const movieId = {{ movie.id }};
+    let isSubmitting = false;
     
-    document.getElementById('ratingForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const userName = document.getElementById('userName').value;
-        const score = document.querySelector('input[name="score"]:checked')?.value;
-        
-        if (!userName || !score) {
-            alert('Por favor, completa todos los campos');
-            return;
-        }
-        
-        try {
-            const response = await fetch(`/api/movies/${movieId}/rate`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    user: userName,
-                    score: parseFloat(score)
-                })
-            });
+    // Manejar el formulario de agregar/eliminar de biblioteca
+    const libraryForms = document.querySelectorAll('form[action*="/add_to_library/"], form[action*="/remove_from_library/"]');
+    libraryForms.forEach(form => {
+        form.addEventListener('submit', (e) => {
+            if (isSubmitting) return;
             
-            if (response.ok) {
+            const isAdding = form.action.includes('/add_to_library/');
+            if (isAdding) {
+                e.preventDefault();
+                isSubmitting = true;
+                
                 createExplosion();
-                document.getElementById('ratingForm').reset();
-                await loadRatings();
-                showSuccessMessage(`¡${userName} valoró la película con ${score} ⭐!`);
+                showSuccessMessage('¡Película agregada a tu biblioteca! 🎬');
+                
+                setTimeout(() => {
+                    form.submit();
+                }, 800);
             }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Error al enviar la valoración');
-        }
+        });
     });
     
-    async function loadRatings() {
-        try {
-            const response = await fetch(`/api/movies/${movieId}/ratings`);
-            const data = await response.json();
+    // Manejar el formulario de valoración
+    const ratingForm = document.querySelector('form[action*="/rate_movie/"]');
+    if (ratingForm) {
+        ratingForm.addEventListener('submit', (e) => {
+            if (isSubmitting) return;
             
-            const ratingsList = document.getElementById('ratingsList');
-            
-            if (data.ratings && data.ratings.length > 0) {
-                ratingsList.innerHTML = data.ratings.map(rating => `
-                    <div class="rating-item">
-                        <strong>${rating.user}</strong>
-                        <span class="float-end text-warning">
-                            ${'⭐'.repeat(Math.round(rating.score))} (${rating.score}/5)
-                        </span>
-                    </div>
-                `).join('');
-            } else {
-                ratingsList.innerHTML = '<p class="text-muted">Sin valoraciones aún</p>';
+            const selectedRating = document.querySelector('input[name="rating"]:checked');
+            if (!selectedRating) {
+                e.preventDefault();
+                alert('Por favor, elige una calificación');
+                return;
             }
-        } catch (error) {
-            console.error('Error loading ratings:', error);
-        }
+            
+            e.preventDefault();
+            isSubmitting = true;
+            
+            const rating = selectedRating.value;
+            const stars = ['', '⭐', '⭐⭐', '⭐⭐⭐', '⭐⭐⭐⭐', '⭐⭐⭐⭐⭐'][rating];
+            
+            createExplosion();
+            showSuccessMessage(`¡Película valorada con ${stars}!`);
+            
+            setTimeout(() => {
+                ratingForm.submit();
+            }, 800);
+        });
     }
     
     function createExplosion() {
@@ -171,38 +268,38 @@
         pulseRing.style.top = centerY + 'px';
         container.appendChild(pulseRing);
         
-        // Confeti
-        for (let i = 0; i < 50; i++) {
+        // Confeti - 60 partículas
+        for (let i = 0; i < 60; i++) {
             const confetti = document.createElement('div');
             confetti.className = 'confetti';
-            const colors = ['#6366f1', '#ec4899', '#f59e0b', '#10b981', '#06b6d4'];
+            const colors = ['#6366f1', '#ec4899', '#f59e0b', '#10b981', '#06b6d4', '#8b5cf6'];
             confetti.style.left = centerX + 'px';
             confetti.style.top = centerY + 'px';
             confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
             
-            const angle = (Math.PI * 2 * i) / 50;
-            const velocity = 5 + Math.random() * 10;
-            const tx = Math.cos(angle) * velocity * 50;
-            const ty = Math.sin(angle) * velocity * 50 - 200;
+            const angle = (Math.PI * 2 * i) / 60;
+            const velocity = 6 + Math.random() * 12;
+            const tx = Math.cos(angle) * velocity * 60;
+            const ty = Math.sin(angle) * velocity * 60 - 250;
             
             confetti.style.setProperty('--tx', tx + 'px');
             confetti.style.setProperty('--ty', ty + 'px');
             
             container.appendChild(confetti);
-            setTimeout(() => confetti.remove(), 3000);
+            setTimeout(() => confetti.remove(), 2500);
         }
         
-        // Fuegos artificiales
-        for (let i = 0; i < 30; i++) {
+        // Fuegos artificiales - más particles
+        for (let i = 0; i < 40; i++) {
             const firework = document.createElement('div');
             firework.className = 'firework';
-            const colors = ['#6366f1', '#ec4899', '#f59e0b', '#10b981'];
+            const colors = ['#6366f1', '#ec4899', '#f59e0b', '#10b981', '#06b6d4'];
             firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
             
-            const angle = (Math.PI * 2 * i) / 30;
-            const velocity = 8 + Math.random() * 12;
-            const tx = Math.cos(angle) * velocity * 80;
-            const ty = Math.sin(angle) * velocity * 80;
+            const angle = (Math.PI * 2 * i) / 40;
+            const velocity = 10 + Math.random() * 15;
+            const tx = Math.cos(angle) * velocity * 100;
+            const ty = Math.sin(angle) * velocity * 100;
             
             firework.style.setProperty('--tx', tx + 'px');
             firework.style.setProperty('--ty', ty + 'px');
@@ -211,7 +308,50 @@
             setTimeout(() => firework.remove(), 800);
         }
         
+        // Shockwave adicional
+        for (let i = 0; i < 8; i++) {
+            const wave = document.createElement('div');
+            wave.style.cssText = `
+                position: fixed;
+                width: 150px;
+                height: 150px;
+                left: ${centerX}px;
+                top: ${centerY}px;
+                border: 2px solid #ec4899;
+                border-radius: 50%;
+                transform: translate(-50%, -50%);
+                animation: pulseWave 0.8s ease-out forwards;
+                opacity: 0.6;
+                pointer-events: none;
+            `;
+            
+            const delay = i * 0.1;
+            wave.style.animationDelay = delay + 's';
+            
+            container.appendChild(wave);
+            setTimeout(() => wave.remove(), 800 + delay * 1000);
+        }
+        
         setTimeout(() => pulseRing.remove(), 600);
+        
+        // Agregar estilo de animación si no existe
+        if (!document.getElementById('explosionStyles')) {
+            const style = document.createElement('style');
+            style.id = 'explosionStyles';
+            style.textContent = `
+                @keyframes pulseWave {
+                    from {
+                        transform: translate(-50%, -50%) scale(0.5);
+                        opacity: 1;
+                    }
+                    to {
+                        transform: translate(-50%, -50%) scale(2);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
     }
     
     function showSuccessMessage(message) {
@@ -220,14 +360,15 @@
             position: fixed;
             top: 20px;
             right: 20px;
-            background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);
+            background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
             color: white;
-            padding: 15px 25px;
-            border-radius: 10px;
-            box-shadow: 0 6px 20px rgba(236, 72, 153, 0.3);
+            padding: 18px 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
             z-index: 3000;
             animation: slideInRight 0.5s ease-out;
             font-weight: 600;
+            font-size: 1.1rem;
         `;
         msg.textContent = message;
         document.body.appendChild(msg);
@@ -237,11 +378,7 @@
             setTimeout(() => msg.remove(), 500);
         }, 3000);
     }
-    
-    // Cargar valoraciones al iniciar
-    loadRatings();
-    
-    // Agregar estilos de animación
+</script>
     const style = document.createElement('style');
     style.textContent = `
         @keyframes slideInRight {

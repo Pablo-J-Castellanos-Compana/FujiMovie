@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Iniciar Sesión - FujiMovie{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card bg-dark border-primary shadow-lg" style="border-width: 2px;">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-user-circle" style="font-size: 3rem; color: #6366f1;"></i>
+                        <h2 class="mt-3" style="color: #e2e8f0;">Iniciar Sesión</h2>
+                    </div>
+
+                    {% if error %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-circle"></i> {{ error }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endif %}
+
+                    {% if success %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="fas fa-check-circle"></i> ¡Registro exitoso! Inicia sesión con tus credenciales.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endif %}
+
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="username" class="form-label" style="color: #cbd5e1;">Usuario</label>
+                            <input type="text" class="form-control bg-dark border-secondary text-light" 
+                                   id="username" name="username" required placeholder="Tu usuario"
+                                   style="color: #e2e8f0;">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="password" class="form-label" style="color: #cbd5e1;">Contraseña</label>
+                            <input type="password" class="form-control bg-dark border-secondary text-light" 
+                                   id="password" name="password" required placeholder="Tu contraseña"
+                                   style="color: #e2e8f0;">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 fw-bold mb-3">
+                            <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                        </button>
+                    </form>
+
+                    <hr style="border-color: #475569;">
+
+                    <p class="text-center" style="color: #cbd5e1;">
+                        ¿No tienes cuenta? 
+                        <a href="{{ url_for('register') }}" style="color: #6366f1; text-decoration: none; font-weight: bold;">
+                            Regístrate aquí
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card:hover {
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.3) !important;
+    }
+    
+    .form-control:focus {
+        background-color: #1e293b !important;
+        border-color: #6366f1 !important;
+        color: #e2e8f0 !important;
+        box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25) !important;
+    }
+    
+    .btn-primary:hover {
+        background-color: #4f46e5 !important;
+        border-color: #4f46e5 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4) !important;
+    }
+</style>
+{% endblock %}
